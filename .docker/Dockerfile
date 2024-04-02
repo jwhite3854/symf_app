@@ -12,7 +12,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get full-upgrade -y;  \
     rm -rf /var/lib/apt/lists/*
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update; \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends apache2 tzdata wget git vim; \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends apache2 curl tzdata wget git vim; \
     DEBIAN_FRONTEND=noninteractive apt-get install -y gcc;  \
     DEBIAN_FRONTEND=noninteractive apt-get remove --purge --auto-remove -y;  \
     rm -rf /var/lib/apt/lists/*;  \
@@ -28,10 +28,17 @@ RUN mkdir /var/www/vhosts/vetl.localhost/logs/
 
 RUN C_ALL=C.UTF-8 add-apt-repository -y ppa:ondrej/php && apt-get update
 RUN DEBIAN_FRONTEND=noninteractive apt-get install -y php8.3 php-pear
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y php8.3-curl
+
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && php composer-setup.php
+RUN php -r "unlink('composer-setup.php');" && mv composer.phar /usr/local/bin/composer
 
 EXPOSE 80
 
 RUN a2ensite local.vhost
 RUN a2dissite 000-default
+
+RUN wget https://get.symfony.com/cli/installer -O - | bash
+RUN mv /root/.symfony5/bin/symfony /usr/local/bin/symfony
 
 CMD ["apache2-foreground"]
