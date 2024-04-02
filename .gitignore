@@ -1,0 +1,8 @@
+.data/*
+!.data/.gitkeep
+.idea
+
+app-logs/*
+
+docs/samples
+docs/data-exports

@@ -1,0 +1,31 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    volumes:
+      - .data/mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: newvetl1234
+  redis:
+    image: redis:7.2.4
+    ports:
+      - "30073:6379"
+    volumes:
+      - ./.docker/redis.conf:/etc/redis/redis.conf
+    environment:
+      REDIS_PASSWORD: newvetl1234
+  web:
+    build: .docker
+    image: vetl-php8
+    links:
+      - mysql
+      - redis
+    ports:
+      - "80:80"
+    volumes:
+      - ./app:/var/www/vhosts/vetl.localhost/app/
+      - ./app-logs:/var/www/vhosts/vetl.localhost/logs/
+
+
