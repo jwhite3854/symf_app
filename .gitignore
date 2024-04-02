@@ -3,6 +3,7 @@
 .idea
 
 app-logs/*
+app/*
 
 docs/samples
 docs/data-exports
